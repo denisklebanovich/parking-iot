@@ -4,7 +4,6 @@ import router from "@/router";
 export type Method = "POST" | "GET" | "PUT" | "DELETE" | "PATCH";
 export const ROOT_URL = import.meta.env.VITE_BACKEND_URL;
 export const URLS = {
-  signup: `${ROOT_URL}/auth/signup`,
   login: `${ROOT_URL}/auth/signin`,
   users: `${ROOT_URL}/users`,
   events: `${ROOT_URL}/events`,
@@ -39,7 +38,6 @@ export default class RestService {
         return response.data;
       });
     } catch (e) {
-      // @ts-ignore
       if (e.response.status === 401) {
         localStorage.removeItem("user");
         router.push("/signin");

@@ -20,10 +20,6 @@
       </NWInput>
       <NWButton @click="signin">Sign in</NWButton>
     </div>
-    <div>
-      Don't have an account?
-      <router-link to="/signup" class="signup-button">Sign up</router-link>
-    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -48,15 +44,15 @@ const passwordError = ref<undefined | string>();
 
 const validateUsername = () => {
   usernameError.value = undefined;
-  if (!username.value || username.value.length < 6) {
-    usernameError.value = "Username must be at least 6 characters";
+  if (!username.value || username.value.length < 5) {
+    usernameError.value = "Username must be at least 5 characters";
   }
 };
 
 const validatePassword = () => {
   passwordError.value = undefined;
-  if (!password.value || password.value.length < 6) {
-    passwordError.value = "Password must be at least 6 characters";
+  if (!password.value || password.value.length < 5) {
+    passwordError.value = "Password must be at least 5 characters";
   }
 };
 

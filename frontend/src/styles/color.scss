@@ -1,0 +1,87 @@
+@use "sass:map";
+@use "sass:list";
+
+$white: #ffffff;
+$backdrop: rgba(0, 0, 0, 0.4);
+
+$background: "background";
+$primary: "primary";
+$secondary: "secondary";
+$tertiary: "tertiary";
+$attention: "attention";
+$disabled: "disabled";
+
+$main: "main";
+$muted: "muted";
+$contrast: "contrast";
+$variation: "variation";
+
+$_colors: (
+        "#{$background}": (
+                "#{$main}": #f6f6f6,
+                "#{$contrast}": #000000,
+                "#{$variation}": #fcfcfc #fafafa #eeeeee,
+        ),
+        "#{$primary}": (
+                "#{$main}": #000000,
+                "#{$muted}": #3c3c3c,
+                "#{$contrast}": #ffffff,
+                "#{$variation}": #f0f0f0 #e0e0e0 #b5b5b5 #494949 #303030,
+        ),
+        "#{$secondary}": (
+                "#{$main}": #9d1681,
+                "#{$muted}": #72195f,
+                "#{$contrast}": #ffffff,
+                "#{$variation}": #fde5f8 #ffd0f5 #ffa8ed #e553c7 #c53ea9,
+        ),
+        "#{$tertiary}": (
+                "#{$main}": #00b2bb,
+                "#{$muted}": #00858c,
+                "#{$contrast}": #ffffff,
+                "#{$variation}": #dbfdff #c4f4f6 #9beff3 #3ce2ea #10c9d2,
+        ),
+        "#{$attention}": (
+                "#{$main}": #ffe500,
+                "#{$muted}": #b4a101,
+                "#{$contrast}": #000000,
+                "#{$variation}": #fffbda #fff8bc #fff494 #fff06a #ffef61,
+        ),
+        "#{$disabled}": (
+                "#{$main}": #f0f0f0,
+                "#{$contrast}": #888888,
+        ),
+);
+
+@function get-color($color, $type, $variationIndex: 0) {
+  @if $type == $variation {
+    @return list.nth(map.get($_colors, $color, $variation), $variationIndex);
+  } @else if map.get($_colors, $color, $type) {
+    @return map.get($_colors, $color, $type);
+  } @else {
+    @error "no #{$type} color #{$color}";
+  }
+}
+
+@function background($type: $main, $variationIndex: 0) {
+  @return get-color($background, $type, $variationIndex);
+}
+
+@function primary($type: $main, $variationIndex: 0) {
+  @return get-color($primary, $type, $variationIndex);
+}
+
+@function secondary($type: $main, $variationIndex: 0) {
+  @return get-color($secondary, $type, $variationIndex);
+}
+
+@function tertiary($type: $main, $variationIndex: 0) {
+  @return get-color($tertiary, $type, $variationIndex);
+}
+
+@function attention($type: $main, $variationIndex: 0) {
+  @return get-color($attention, $type, $variationIndex);
+}
+
+@function disabled($type: $main, $variationIndex: 0) {
+  @return get-color($disabled, $type, $variationIndex);
+}

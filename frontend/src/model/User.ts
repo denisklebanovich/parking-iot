@@ -9,11 +9,10 @@ export interface SignUpRequest extends SignInRequest {
     username: string;
     password: string;
     rfid: string;
-    license_plate: string;
-
+    licensePlate: string;
 }
 
 export interface User {
     username: string;
-    access_token: string;
+    accessToken: string;
 }
