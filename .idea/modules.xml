@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/frontend/frontend.iml" filepath="$PROJECT_DIR$/frontend/frontend.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/parking-iot.iml" filepath="$PROJECT_DIR$/.idea/parking-iot.iml" />
       <module fileurl="file://$PROJECT_DIR$/raspberry/raspberry.iml" filepath="$PROJECT_DIR$/raspberry/raspberry.iml" />
     </modules>
