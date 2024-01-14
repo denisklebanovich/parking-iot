@@ -1,14 +1,17 @@
-import paho.mqtt.client as mqtt
-from random import randint
-from settings import MQTT_BROKER_ADDRESS, MQTT_TOPIC, PARKING_NUMBER
 import json
+from random import randint
+
+import paho.mqtt.client as mqtt
+
+from settings import MQTT_BROKER_ADDRESS, MQTT_TOPIC, PARKING_ID, ENTRY
+
 
 def send_message():
     # Message content
     message_content = {
+        "parkingId": PARKING_ID,
         "rfid": randint(100000, 999999),
-        "parkingNumber": PARKING_NUMBER,  # Replace with the actual parking number
-        "entry": False
+        "entry": ENTRY
     }
 
     # Convert message content to JSON
@@ -17,6 +20,7 @@ def send_message():
     # Publish the message to the specified topic
     client.publish(MQTT_TOPIC, message_json)
     print("Message sent!")
+
 
 if __name__ == "__main__":
     # Create an MQTT client instance
