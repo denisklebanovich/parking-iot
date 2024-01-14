@@ -1,0 +1,3 @@
+PARKING_NUMBER = 1
+MQTT_TOPIC = "test/topic"
+MQTT_BROKER_ADDRESS = "localhost"
