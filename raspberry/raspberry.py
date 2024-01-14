@@ -1,5 +1,4 @@
 import json
-from random import randint
 
 import paho.mqtt.client as mqtt
 
@@ -10,7 +9,7 @@ def send_message():
     # Message content
     message_content = {
         "parkingId": PARKING_ID,
-        "rfid": randint(100000, 999999),
+        "rfid": 123456789,
         "entry": ENTRY
     }
 
