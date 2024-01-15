@@ -23,14 +23,14 @@
   </div>
 </template>
 <script setup lang="ts">
-import { inject, Ref, ref } from "vue";
+import { inject, type Ref, ref } from "vue";
 import NWInput from "@/components/core/input/NWInput.vue";
 import NWButton from "@/components/core/button/NWButton.vue";
 import { useUserStore } from "@/stores/UserStore";
 import NWToast from "@/components/core/toast/NWToast.vue";
 import router from "@/router";
 import { displayErrorMessage } from "@/utils/ErrorHandler";
-import { User } from "@/model/User";
+import type { User } from "@/model/User";
 
 const username = ref("");
 const password = ref("");
@@ -62,13 +62,26 @@ const validateForm = () => {
 };
 const signin = async () => {
   validateForm();
+
   if (usernameError.value || passwordError.value) {
     return;
   }
+
   try {
-    const user = await userStore.signin({ username: username.value, password: password.value });
+    const user = await userStore.signin({
+      username: username.value,
+      password: password.value,
+      role: "user"
+    });
+
     userStore.setUser(user as User);
-    await router.push("/");
+
+    // Login as user or admin
+    if (user.role === "user") {
+      router.push("/user");
+    } else {
+      router.push("/admin");
+    }
   } catch (e) {
     displayErrorMessage(e, toastRef);
   }

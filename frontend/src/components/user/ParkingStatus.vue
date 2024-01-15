@@ -5,7 +5,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { useParkingStore } from '@/src/stores/ParkingStore.ts';
+import { useParkingStore } from '@/stores/ParkingStore';
 import { onMounted} from "vue";
 
 const parkingStore = useParkingStore();

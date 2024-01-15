@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import SigninView from "@/views/SigninView.vue";
-import DashboardUserVue from "@/views/DashboardUserView.vue";
-import DashboardAdminVue from "@/views/DashboardAdminView.vue";
+import DashboardUserVue from "@/views/DashboardUser.vue";
+import DashboardAdminVue from "@/views/DashboardAdmin.vue";
 
 export const ROUTES = {
   SIGNIN: "/signin",
@@ -12,6 +12,10 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/',
+      redirect: ROUTES.SIGNIN,
+    },
+    {
       path: ROUTES.SIGNIN,
       name: ROUTES.SIGNIN,
       component: SigninView
@@ -19,18 +23,12 @@ const router = createRouter({
     {
       path: ROUTES.DASHBOARD_USER,
       name: ROUTES.DASHBOARD_USER,
-      component: DashboardUserVue,
-      meta: {
-        requiresAuth: true
-      }
+      component: DashboardUserVue
     },
     {
       path: ROUTES.DASHBOARD_ADMIN,
       name: ROUTES.DASHBOARD_ADMIN,
-      component: DashboardAdminVue,
-      meta: {
-        requiresAuth: true
-      }
+      component: DashboardAdminVue
     }
   ]
 })

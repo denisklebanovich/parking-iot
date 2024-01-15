@@ -1,7 +1,6 @@
-import type { SignInRequest, SignUpRequest, User } from "@/model/User";
+import type { SignInRequest, User } from "@/model/User";
 import { defineStore } from "pinia";
-import { signin, signup } from "@/services/AuthService";
-import router from "@/router";
+import { signin } from "@/services/AuthService";
 
 export interface UserStoreState {
   user?: User;
@@ -15,9 +14,6 @@ export const useUserStore = defineStore({
   actions: {
     signin: async function(signinRequest: SignInRequest) {
       return await signin(signinRequest);
-    },
-    signup: async function(signupRequest: SignUpRequest) {
-      await signup(signupRequest);
     },
     setUser: function(user: User) {
       localStorage.setItem("user", JSON.stringify(user));

@@ -7,55 +7,23 @@
     -->
   <div class="dashboard">
     <div class="greating">
-      <h1>Hello, {{ userStore.user.name }}</h1>
+      <h1>Hello, {{ userStore.user && userStore.user.name }}</h1>
     </div>
-
-    <div class="current-user-status">
-      <h3>Current status of parking usage</h3>
-      <p>Time of entering: {{ userStore.user.timeOfEntering }}</p>
-      <p>Time of leaving: {{ userStore.user.timeOfLeaving }}</p>
-      <p>Time of using: {{ userStore.user.timeOfUsing }}</p>
-      <p>Price: {{ userStore.user.price }}</p>
-    </div>
-
-    <div class="current-parking-status">
-      <h3>Current status of parking</h3>
-      <p>Available places: {{ userStore.user.availablePlaces }}</p>
-    </div>
-
-    <div class="history">
-      <h3>History</h3>
-      <!--table of all usages from the last one to the first-->
-      <table>
-        <tr>
-          <th>Time of entering</th>
-          <th>Time of leaving</th>
-        </tr>
-        <tr>
-          <td>12:00</td>
-          <td>13:00</td>
-        </tr>
-        <tr>
-          <td>12:00</td>
-          <td>13:00</td>
-        </tr>
-        <tr>
-          <td>12:00</td>
-          <td>13:00</td>
-        </tr>
-      </table>
-    </div>
+    <UserStatus class="current-user-status"></UserStatus>
+    <ParkingStatus class="current-parking-status"></ParkingStatus>
+    <UserHistory class="history"></UserHistory>
   </div>
 </template>
 
 <script setup lang="ts">
-import { UserHistory } from '@/components/user/UserHistory.vue';
-import { UserStatus } from '@/components/user/UserStatus.vue';
-import { ParkingStatus } from '@/components/ParkingStatus.vue';
+import UserHistory from '@/components/user/UserHistory.vue'
+import UserStatus from '@/components/user/UserStatus.vue'
+import ParkingStatus from '@/components/user/ParkingStatus.vue'
 
-import { userStore } from '@/src/stores/UserStore.ts';
-import { User } from '@/src/models/User.ts';
-import { onMounted} from "vue";
+import { useUserStore } from '@/stores/UserStore'
+import { onMounted} from "vue"
+
+const userStore = useUserStore();
 
 onMounted(async () => {
   await userStore.getUser();
