@@ -1,7 +1,6 @@
 export interface SignInRequest {
     username: string;
     password: string;
-    role: string;
 }
 
 export interface SignUpRequest extends SignInRequest {
