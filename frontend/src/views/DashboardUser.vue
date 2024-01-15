@@ -49,14 +49,10 @@
 </template>
 
 <script setup lang="ts">
-import { UserHistory } from '@/components/user/UserHistory.vue';
-import { UserStatus } from '@/components/user/UserStatus.vue';
-import { ParkingStatus } from '@/components/ParkingStatus.vue';
-
-import { userStore } from '@/src/stores/UserStore.ts';
-import { User } from '@/src/models/User.ts';
 import { onMounted} from "vue";
+import {useUserStore} from "@/stores/UserStore";
 
+const userStore = useUserStore();
 onMounted(async () => {
   await userStore.getUser();
 });

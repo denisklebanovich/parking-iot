@@ -68,7 +68,7 @@ const signin = async () => {
   try {
     const user = await userStore.signin({ username: username.value, password: password.value });
     userStore.setUser(user as User);
-    await router.push("/");
+    await router.push("/user");
   } catch (e) {
     displayErrorMessage(e, toastRef);
   }

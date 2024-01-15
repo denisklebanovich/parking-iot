@@ -9,7 +9,7 @@ export const URLS = {
   events: `${ROOT_URL}/events`,
 };
 
-export const AUTH_HEADER = (url: string) => {
+export const AUTH_HEADER = () => {
   const user = localStorage.getItem("user");
   if (user) {
     return {
@@ -25,19 +25,19 @@ export default class RestService {
     queryParams?: URLSearchParams,
     data?: REQUEST,
     headers?: any
-  ): Promise<RESPONSE> {
+  ) {
     url = this.setQueryParams(url, queryParams);
     const config = {
       url,
       method,
       data,
-      headers: { ...headers, ...AUTH_HEADER(url) }
+      headers: { ...headers, ...AUTH_HEADER() }
     };
     try {
       return await axios.request<RESPONSE>(config).then((response) => {
         return response.data;
       });
-    } catch (e) {
+    } catch (e : any) {
       if (e.response.status === 401) {
         localStorage.removeItem("user");
         router.push("/signin");
