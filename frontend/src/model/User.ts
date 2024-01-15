@@ -13,6 +13,11 @@ export interface SignUpRequest extends SignInRequest {
 }
 
 export interface User {
+    name: string;
+    surname: string;
     username: string;
+    rfid: string;
+    role: string;
+    licensePlate: string;
     accessToken: string;
 }
