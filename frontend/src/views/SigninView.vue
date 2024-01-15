@@ -70,8 +70,7 @@ const signin = async () => {
   try {
     const user = await userStore.signin({
       username: username.value,
-      password: password.value,
-      role: "user"
+      password: password.value
     });
 
     userStore.setUser(user as User);

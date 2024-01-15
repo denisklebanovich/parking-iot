@@ -1,6 +1,7 @@
 import type { SignInRequest, User } from "@/model/User";
 import { defineStore } from "pinia";
 import { signin } from "@/services/AuthService";
+import router from "@/router";
 
 export interface UserStoreState {
   user?: User;
