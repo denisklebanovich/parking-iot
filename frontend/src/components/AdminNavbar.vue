@@ -7,7 +7,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <router-link to="/admin/parking" class="nav-link">Current Parking</router-link>
+            <router-link to="/admin/parking" class="nav-link">Parking list</router-link>
           </li>
           <li class="nav-item">
             <router-link to="/admin/add" class="nav-link">Add new user</router-link>
@@ -27,14 +27,21 @@
   
 <script>
 import LogoutButton from './LogoutButton.vue';
-import { mapGetters } from 'vuex';
+import useUserStore from '../stores/UserStore';
 
 export default {
   components: {
     LogoutButton,
   },
   computed: {
-    ...mapGetters('user', ['userName', 'userSurname']),
+    userName() {
+      const userStore = useUserStore();
+      return userStore.user.name;
+    },
+    userSurname() {
+      const userStore = useUserStore();
+      return userStore.user.surname;
+    },
   },
 };
 </script>

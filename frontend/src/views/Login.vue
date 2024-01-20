@@ -21,8 +21,7 @@
   
   
   <script>
-  import { mapActions } from 'vuex';
-  import apiService from '../services/apiService';
+  import useUserStore from '../stores/UserStore';
 
   export default {
     data() {
@@ -33,18 +32,14 @@
     },
 
     methods: {
-      ...mapActions('user', ['setUserData']),
-
       async login() {
+        const userStore = useUserStore();
+        
       try {
-        const token = await apiService.login(this.username, this.password);
-        localStorage.setItem('token', token);
+        const user = await userStore.signin( {username: this.username, password: this.password} );
+        userStore.setUser(user);
 
-        const userResponse = await apiService.getUserDetails(token);
-        console.log(userResponse);
-        this.setUserData(userResponse);
-
-        this.$router.push(userResponse.role === 'USER' ? '/user/parking' : '/admin/parking');
+        this.$router.push(user.role === 'USER' ? '/user/parking' : '/admin/parking');
       } catch (error) {
         console.error(error.message);
       }

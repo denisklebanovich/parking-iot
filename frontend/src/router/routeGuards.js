@@ -1,12 +1,12 @@
-import store from '../stores/UserStore'; 
+import useUserStore from '../stores/UserStore';
 
-export const isAdmin = (to, from, next) => {
+export const isAdmin = async (to, from, next) => {
+  const user = await useUserStore().getUser();
   try {
-    const userRole = store.getters['user/userRole'];
 
-    if (userRole === 'ADMIN') {
+    if (user.role === 'ADMIN') {
       next();
-    } else if (userRole === 'USER') {
+    } else if (user.role === 'USER') {
       next('/user/parking');
     } else {
       next('/');
@@ -17,13 +17,14 @@ export const isAdmin = (to, from, next) => {
   }
 };
 
-export const isUser = (to, from, next) => {
+export const isUser = async (to, from, next) => {
   try{
-    const userRole = store.getters['user/userRole'];
+    const user = await useUserStore().getUser();
+    console.log(user);
 
-    if (userRole === 'USER') {
+    if (user.role === 'USER') {
       next();
-    } else if (userRole === 'ADMIN') {
+    } else if (user.role === 'ADMIN') {
       next('/admin/parking');
     } else {
       next('/');

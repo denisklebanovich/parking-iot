@@ -1,31 +1,35 @@
 <template>
     <main>
         <UserNavbar />
-
         <div>
-        <!-- Content -->
-        <div class="container mt-5">
+          <!-- Content -->
+          <div class="container mt-5">
             <h2>Your current parking page</h2>
-    
+            <!-- Not parked section -->
+              <div v-if="!isUserParked" class="card mt-4">
+                <div class="card-body">
+                  <h4 class="card-title">Not Parked</h4>
+                  <p class="card-text">You are not currently parked.</p>
+                </div>
+              </div>
             <!-- Current Parking Section -->
-            <div class="card mt-4">
-            <div class="card-body">
-                <h4 class="card-title">Current Parking</h4>
-                <p class="card-text">Parking Number: {{ currentParkingNumber }}</p>
-                <p class="card-text">Parking Address: {{ currentParkingAddress }}</p>
-                <p class="card-text">All Parking Spaces: {{ allParkingSpaces }}</p>
-                <p class="card-text">Free Parking Spaces: {{ freePlaces }}</p>
+            <div v-else class="card mt-4">
+              <div class="card-body">
+                  <h4 class="card-title">Current Parking</h4>
+                  <p class="card-text">Parking Id: {{ currentParkingNumber }}</p>
+                  <p class="card-text">Parking Address: {{ currentParkingAddress }}</p>
+                  <p class="card-text">All Parking Spaces: {{ allParkingSpaces }}</p>
+                  <p class="card-text">Free Parking Spaces: {{ freeParkingSpaces }}</p>
+              </div>
             </div>
-            </div>
-            
-        </div>
+          </div>
         </div>
     </main>
   </template>
   
   <script>
   import UserNavbar from '../components/UserNavbar.vue';
-  import apiService from '../services/apiService';
+  import apiService from '../services/ApiService';
     
   export default {
     components: {
@@ -36,28 +40,33 @@
         currentParkingNumber: '',
         currentParkingAddress: '',
         allParkingSpaces: 0,
-        freePlaces: 0,
+        freeParkingSpaces: 0,
       };
     },
+    computed: {
+    isUserParked() {
+      // Check if parking information is not null or empty
+      return (
+        this.currentParkingNumber !== null &&
+        this.currentParkingNumber !== '' &&
+        this.currentParkingAddress !== null &&
+        this.currentParkingAddress !== ''
+      );
+    },
+  },
     created() {
       this.getCurrentParkingDetails();
     },
     methods: {
       async getCurrentParkingDetails() {
         try {
-          const token = localStorage.getItem('token');
+          const parkingDetails = await apiService.getParkingInfo();
+          console.log(parkingDetails);
 
-          if (!token) {
-            console.error('Unauthorized: Token not found');
-            return;
-          }
-
-          const parkingDetails = await apiService.getCurrentParkingDetails(token);
-
-          this.currentParkingNumber = parkingDetails.parkingNumber;
+          this.currentParkingNumber = parkingDetails.parkingIndex;
           this.currentParkingAddress = parkingDetails.parkingAddress;
-          this.allParkingSpaces = parkingDetails.allSpaces;
-          this.freeParkingSpaces = parkingDetails.freeSpaces;
+          this.allParkingSpaces = parkingDetails.parkingCapacity;
+          this.freeParkingSpaces = parkingDetails.parkingFreePlaces;
         } catch (error) {
           console.error('Failed to fetch parking details:', error);
         }

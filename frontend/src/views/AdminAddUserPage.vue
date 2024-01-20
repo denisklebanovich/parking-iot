@@ -5,6 +5,13 @@
             <div class="mx-auto w-25 " style="max-width:100%;">
               <h2 class="text-center mb-3">Add User</h2>
               <form @submit.prevent="register(userData)">
+                <!--Rfid-->
+                <div class="row">
+                    <div class="col-md-12 form-group mb-3">
+                      <label for="rfid" class="form-label">Rfid number</label>
+                      <input v-model="userData.rfid" id="rfid" type="text"  name="rfid" class="form-control" placeholder="Rfid number" required>
+                    </div>
+                </div>
                 <!--Name-->
                 <div class="row">
                   <div class="col-md-12 form-group mb-3">
@@ -40,13 +47,6 @@
                       <input v-model="userData.plate" id="plate" type="text"  name="plate" class="form-control" placeholder="License plate" required>
                     </div>
                   </div>
-                <!--Rfid-->
-                <div class="row">
-                    <div class="col-md-12 form-group mb-3">
-                      <label for="rfid" class="form-label">Rfid number</label>
-                      <input v-model="userData.rfid" id="rfid" type="text"  name="rfid" class="form-control" placeholder="Rfid number" required>
-                    </div>
-                  </div>
                <!-- Submit -->
                 <div class="row">
                   <div class="col-md-12 form-group">
@@ -62,7 +62,7 @@
 
 <script>
 import AdminNavbar from '../components/AdminNavbar.vue';
-import apiService from '../services/apiService';
+import apiService from '../services/ApiService';
 
 export default {
   components: {
@@ -71,12 +71,12 @@ export default {
   data() {
     return {
       userData: {
+        rfid: '',
         name: '',
         surname: '',
         username: '',
         password: '',
         plate: '',
-        rfid: '',
         role: 'USER',
       },
     };
@@ -84,10 +84,13 @@ export default {
   methods: {
     async register(userData) {
       try {
-        const token = localStorage.getItem('token');
-        await apiService.addUser(token, userData);
+        const response = await apiService.signup(userData);
 
-        this.$router.push('/admin/parking');
+        if (response) {
+          this.$router.push('/admin/parking');
+        } else {
+          console.error('Failed to add user');
+        }
       } catch (error) {
         console.error('Failed to add user:', error);
       }
