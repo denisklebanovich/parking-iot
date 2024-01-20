@@ -11,7 +11,7 @@ def send_message(rfidNumber):
     # Message content
     message_content = {
         "rfid": rfidNumber,
-        "parkingNumber": PARKING_ID,
+        "parkingId": PARKING_ID,
         "entry": ENTRY
     }
 
