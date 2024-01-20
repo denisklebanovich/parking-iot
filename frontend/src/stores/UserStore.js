@@ -1,43 +1,39 @@
-import { createStore } from 'vuex';
+import { defineStore } from 'pinia';
+import ApiService from '../services/ApiService';
 
-const store = createStore({
-  modules: {
-    user: {
-      namespaced: true,
-      state: {
-        name: '',
-        surname: '',
-        role: '',
-        token: '',
-      },
-      mutations: {
-        setUserData(state, userData) {
-          state.name = userData.name;
-          state.surname = userData.surname;
-          state.role = userData.role;
-        },
-        clearUserData(state) {
-          state.name = '';
-          state.surname = '';
-          state.role = '';
-        },
-      },
-      actions: {
-        setUserData({ commit }, userData) {
-          commit('setUserData', userData);
-        },
-        clearUserData({ commit }) {
-          commit('clearUserData');
-        },
-      },
-      getters: {
-        userName: state => state.name,
-        userSurname: state => state.surname,
-        userRole: state => state.role,
-        userToken: state => state.token,
-      },
+export const useUserStore = defineStore({
+  id: 'user',
+  state: () => ({
+    user: undefined,
+  }),
+  getters: {
+    userUser: state => state.user,
+  },
+  actions: {
+    async signin(signInRequest){
+        return ApiService.signin(signInRequest);
+    },
+    async signup(signUpRequest){
+        return ApiService.signup(signUpRequest);
+    },
+    async setUser(user) {
+        localStorage.setItem("user", JSON.stringify(user));
+        this.user = user;
+    },
+    async getUser() {
+        if (!this.user) {
+            const user = localStorage.getItem("user");
+            if (user) {
+              this.user = JSON.parse(user);
+            }
+          }
+        return this.user;
+    },
+    clearUserData() {
+      this.user = undefined;
     },
   },
 });
 
-export default store;
+// Export the store for use in the application
+export default useUserStore;

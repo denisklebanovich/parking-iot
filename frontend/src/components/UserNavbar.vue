@@ -24,14 +24,21 @@
 
 <script>
 import LogoutButton from './LogoutButton.vue';
-import { mapGetters } from 'vuex';
+import useUserStore from '../stores/UserStore';
 
 export default {
   components: {
     LogoutButton,
   },
   computed: {
-    ...mapGetters('user', ['userName', 'userSurname']),
+    userName() {
+      const userStore = useUserStore();
+      return userStore.user.name;
+    },
+    userSurname() {
+      const userStore = useUserStore();
+      return userStore.user.surname;
+    },
   },
 };
 </script>

@@ -34,7 +34,7 @@
             <div class="col-md-6 mb-3">
               <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title">Most Used Parking Place</h5>
+                  <h5 class="card-title">Most Used Parking</h5>
                   <p class="card-text">{{ mostUsedParkingPlace }}</p>
                 </div>
               </div>
@@ -48,7 +48,7 @@
   
   <script>
   import AdminNavbar from '../components/AdminNavbar.vue';
-  import apiService from '../services/apiService';
+  import apiService from '../services/ApiService';
 
   export default {
     name: 'AdminStatistics',
@@ -69,8 +69,7 @@
     methods: {
       async fetchStatistics() {
         try {
-          const token = localStorage.getItem('token');
-          const statistics = await apiService.getAdminStatistics(token);
+          const statistics = await apiService.getAdminStatistics();
 
           this.totalUsers = statistics.totalUsers;
           this.totalParkingSpaces = statistics.totalParkingSpaces;

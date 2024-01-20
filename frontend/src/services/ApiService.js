@@ -1,129 +1,95 @@
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
+import RestService, {URLS} from "./RestService";
 
 class ApiService {
-  constructor() {
-    this.baseURL = 'http://localhost:8080';
-    this.mock = new MockAdapter(axios);
-  }
-
-  async login(username, password) {
+  static async signin(signInRequest) {
     try {
-      this.mock.onPost(`${this.baseURL}/api/signin`).reply(200, { token: 'mocked_token' });
+    // return await RestService.ajax(URLS.login, "POST", null, signInRequest);
 
-      const response = await axios.post(`${this.baseURL}/api/signin`, { username, password });
-      return response.data.token;
+    // Тут нужно как-то обработать токен, и вернуть его в виде {name: '', surname: '', role: '', token: ''}
+    const mockData = {
+      username: 'john.doe',
+      name: 'John',
+      surname: 'Doe',
+      role: 'ADMIN',
+      token: 'mocked_token',
+    }
+    return mockData;
     } catch (error) {
       throw new Error(`Login failed: ${error.message}`);
     }
   }
 
-  async getUserDetails(token) {
+  static async getParkingInfo(username) {
     try {
-      this.mock.onGet(`${this.baseURL}/api/user/me`, { headers: { Authorization: `Bearer ${token}` } }).reply(200, {
-        name: 'John',
-        surname: 'Doe',
-        role: 'ADMIN',
-      });
+      // return await RestService.ajax(URLS.parking, "GET", username, null);
 
-      const response = await axios.get(`${this.baseURL}/api/user/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return response.data;
+      //Если адрес или индекс пустой, на странице парковки будет отображаться "You are not parked"
+      const mockData = {
+        parkingIndex: '1',
+        parkingAddress: 'Address1',
+        parkingCapacity: 20,
+        parkingFreePlaces: 10,
+      };
+      return mockData;
     } catch (error) {
-      throw new Error(`Failed to fetch user details: ${error.message}`);
+      console.error('Failed to fetch parking info:', error);
+      throw error;
     }
   }
 
-    async getParkingHistory(token) {
-        try {
-          this.mock.onGet(`${this.baseURL}/api/user/history`, { headers: { Authorization: `Bearer ${token}` } }).reply(200, [
-            { parkingId: 'ABC123', dateOfEntry: '2022-01-01 10:00:00', dateOfLeaving: '2022-01-01 12:00:00' },
-            { parkingId: 'CDS123', dateOfEntry: '2022-01-01 10:00:00', dateOfLeaving: '2022-01-01 12:00:00' },
-          ]);
-    
-          const response = await axios.get(`${this.baseURL}/api/user/history`, { headers: { Authorization: `Bearer ${token}` } });
-          return response.data;
-        } catch (error) {
-          console.error('Failed to fetch parking history:', error);
-          throw error;
-        }
-      }
-    
-    async getCurrentParkingDetails(token) {
+  static async getParkingHistory(username) {
     try {
-        this.mock.onGet(`${this.baseURL}/api/parking/current`, { headers: { Authorization: `Bearer ${token}` } }).reply(200, {
-        parkingNumber: '1',
-        parkingAddress: 'Some address',
-        allSpaces: 20,
-        freeSpaces: 10,
-        });
-
-        const response = await axios.get(`${this.baseURL}/api/parking/current`, { headers: { Authorization: `Bearer ${token}`} });
-
-        return {
-        parkingNumber: response.data.parkingNumber,
-        parkingAddress: response.data.parkingAddress,
-        allSpaces: response.data.allSpaces,
-        freeSpaces: response.data.freeSpaces,
-        };
+      // return await RestService.ajax(URLS.history, "GET", username, null);
+      const mockData = [
+        {parkingAddress: 'Some address1', dateOfEntry: '2021-01-01 12:00:00', dateOfLeaving: '2021-01-01 12:30:00'},
+        {parkingAddress: 'Some address1', dateOfEntry: '2021-01-01 12:00:00', dateOfLeaving: '2021-01-01 12:30:00'},
+      ];
+      return mockData;
     } catch (error) {
-        console.error('Failed to fetch parking details:', error);
-        throw error;
-        }
+      console.error('Failed to fetch parking history:', error);
+      throw error;
     }
+  }
 
-    async getCurrentlyParkedUsers(token) {
-        try {
-          this.mock.onGet(`${this.baseURL}/api/parking/currently-parked`, { headers: { Authorization: `Bearer ${token}` } }).reply(200, [
-            { name: 'John Doe', rfidCardNumber: '123456', dateOfEntry: '2022-01-01 10:00:00' },
-            { name: 'Jane Doe', rfidCardNumber: '654321', dateOfEntry: '2022-01-01 10:00:00' },
-          ]);
-    
-          const response = await axios.get(`${this.baseURL}/api/parking/currently-parked`, { headers: { Authorization: `Bearer ${token}`} });
-    
-          return response.data;
-        } catch (error) {
-          console.error('Failed to fetch currently parked users:', error);
-          throw error;
-        }
+  static async getParkings() {
+    try {
+      // return await RestService.ajax(URLS.parkings, "GET", null, null);
+      const mockData = [
+        { parkingIndex: 'A1', parkingAddress: 'Address1', parkingCapacity: 20, parkingFreePlaces: 10, parkedUsers: [{name: 'Jonh Doe', dateOfEntry:'2021-01-01 12:30:00'}, {name: 'Jane Doe', dateOfEntry:'2021-01-01 12:30:00'}]},
+        { parkingIndex: 'B1', parkingAddress: 'Address2', parkingCapacity: 30, parkingFreePlaces: 15, parkedUsers: [{name: 'Jane Doe', dateOfEntry:'2021-01-01 12:30:00'}]},
+        ];
+      return mockData;
+    } catch (error) {
+      console.error('Failed to fetch currently parked users:', error);
+      throw error;
     }
+  }
 
-    async getAdminStatistics(token) {
-        try {
-          this.mock.onGet(`${this.baseURL}/api/statistics`, { headers: { Authorization: `Bearer ${token}` } }).reply(200, {
-            totalUsers: 100,
-            totalParkingSpaces: 210,
-            averageStayTime: 30,
-            mostUsedParkingPlace: 'A1',
-          });
-    
-          const response = await axios.get(`${this.baseURL}/api/statistics`, { headers: { Authorization: `Bearer ${token}`} });
-    
-          return {
-            totalUsers: response.data.totalUsers,
-            totalParkingSpaces: response.data.totalParkingSpaces,
-            averageStayTime: response.data.averageStayTime,
-            mostUsedParkingPlace: response.data.mostUsedParkingPlace,
-          };
-        } catch (error) {
-          console.error('Failed to fetch admin statistics:', error);
-          throw error;
-        }
-      }
+  static async getAdminStatistics() {
+    try {
+      // return await RestService.ajax(URLS.statistics, "GET", null, null);
+      
+      const mockData = { 
+        totalUsers: 20, 
+        totalParkingSpaces: 10, 
+        averageStayTime: '00:30:00', 
+        mostUsedParkingPlace: 'A1' };
+      return mockData;
+    } catch (error) {
+      console.error('Failed to fetch admin statistics:', error);
+      throw error;
+    }
+  }
 
-      async addUser(token, userData) {
-        try {
-          this.mock.onPost(`${this.baseURL}/user/register`, userData).reply(201);
-    
-          const response = await axios.post(`${this.baseURL}/user/register`, userData, { headers: { Authorization: `Bearer ${token}`} });
-    
-          return response.data;
-        } catch (error) {
-          console.error('Failed to add user:', error);
-          throw error;
-        }
-      }
+  static async signup() {
+    try {
+      // return await RestService.ajax(URLS.signup, "POST", null, userData);
+      return true;
+    } catch (error) {
+      console.error('Failed to add user:', error);
+      throw error;
+    }
+  }
 }
 
-export default new ApiService();
+export default ApiService;

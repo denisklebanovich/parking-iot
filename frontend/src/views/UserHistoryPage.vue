@@ -18,7 +18,7 @@
           </thead>
           <tbody>
             <tr v-for="entry in parkingHistory">
-              <td>{{ entry.parkingId }}</td>
+              <td>{{ entry.parkingAddress }}</td>
               <td>{{ entry.dateOfEntry }}</td>
               <td>{{ entry.dateOfLeaving }}</td>
             </tr>
@@ -30,7 +30,7 @@
   
   <script>
   import UserNavbar from '../components/UserNavbar.vue';
-  import apiService from '../services/apiService';
+  import apiService from '../services/ApiService';
   
   export default {
     components: {
@@ -47,15 +47,9 @@
     methods: {
     async getParkingHistory() {
       try {
-        const token = localStorage.getItem('token');
-
-        if (!token) {
-          console.error('Unauthorized: Token not found');
-          return;
-        }
-
-        const response = await apiService.getParkingHistory(token);
+        const response = await apiService.getParkingHistory();
         this.parkingHistory = response;
+        console.log(response);
       } catch (error) {
         console.error('Failed to fetch parking history:', error);
       }
