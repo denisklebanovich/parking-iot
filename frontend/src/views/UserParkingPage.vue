@@ -4,9 +4,9 @@
     <div>
       <!-- Content -->
       <div class="container mt-5">
-        <h2>Your current parking page</h2>
+        <h2>Your current parking</h2>
         <!-- Not parked section -->
-        <div v-if="this.currentParking" class="card mt-4">
+        <div v-if="!this.currentParking" class="card mt-4">
           <div class="card-body">
             <h4 class="card-title">Not Parked</h4>
             <p class="card-text">You are not currently parked.</p>
@@ -41,8 +41,10 @@ export default {
       currentParking: {
         id: null,
         address: null,
+        capacity: null,
         allParkingSpaces: null,
-        freeParkingSpaces: null,
+        freePlaces: null,
+        entryTimestamp: null,
       }
     };
   },
@@ -54,6 +56,7 @@ export default {
       try {
         const userId = JSON.parse(localStorage.getItem("user")).id;
         this.currentParking = await apiService.getParkingInfo(userId);
+        console.log(this.currentParking);
       } catch (error) {
         console.error('Failed to fetch parking details:', error);
       }

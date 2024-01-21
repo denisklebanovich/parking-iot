@@ -27,8 +27,8 @@
               </thead>
               <tbody>
                 <tr v-for="user in parkedUsers" :key="user.name">
-                  <td>{{ user.name }}</td>
-                  <td>{{ user.dateOfEntry }}</td>
+                  <td>{{ user.name }} {{ user.surname}}</td>
+                  <td>{{ user.entryTimestamp }}</td>
                 </tr>
               </tbody>
             </table>

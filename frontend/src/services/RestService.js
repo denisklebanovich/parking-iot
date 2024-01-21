@@ -4,9 +4,7 @@ import router from "@/router";
 export const ROOT_URL = 'http://localhost:8080/api';
 export const URLS = {
     signin: `${ROOT_URL}/auth/signin`,
-    signup: `${ROOT_URL}/auth/signup`,
-    users: `${ROOT_URL}/users`,
-    events: `${ROOT_URL}/events`,
+    register: `${ROOT_URL}/auth/register`,
     parking: `${ROOT_URL}/parking`,
     statistics: `${ROOT_URL}/statistics`,
 };

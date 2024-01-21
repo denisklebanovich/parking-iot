@@ -76,8 +76,7 @@ export default {
         surname: '',
         username: '',
         password: '',
-        plate: '',
-        role: 'USER',
+        licensePlate: ''
       },
     };
   },

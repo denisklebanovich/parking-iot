@@ -4,12 +4,12 @@
     <h2 class="mb-3 text-center">Parkings</h2>
     <ParkingItem
       v-for="parking in parkings"
-      :key="parking.parkingIndex"
-      :parkingIndex="parking.parkingIndex"
-      :parkingAddress="parking.parkingAddress"
-      :parkingCapacity="parking.parkingCapacity"
-      :parkingFreePlaces="parking.parkingFreePlaces"
-      :parkedUsers="parking.parkedUsers"
+      :key="parking.id"
+      :parkingIndex="parking.id"
+      :parkingAddress="parking.address"
+      :parkingCapacity="parking.capacity"
+      :parkingFreePlaces="parking.freePlaces"
+      :parkedUsers="parking.users"
     />
   </div>
 </template>

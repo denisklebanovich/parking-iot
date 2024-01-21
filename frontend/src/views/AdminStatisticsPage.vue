@@ -11,7 +11,7 @@
               <div class="card">
                 <div class="card-body">
                   <h5 class="card-title">Total Users</h5>
-                  <p class="card-text">{{ totalUsers }}</p>
+                  <p class="card-text">{{ this.statistics.totalUsers }}</p>
                 </div>
               </div>
             </div>
@@ -19,7 +19,7 @@
               <div class="card">
                 <div class="card-body">
                   <h5 class="card-title">Total Parking Spaces</h5>
-                  <p class="card-text">{{ totalParkingSpaces }}</p>
+                  <pt class="card-text">{{ this.statistics.totalParkingPlaces  }}</pt>
                 </div>
               </div>
             </div>
@@ -27,7 +27,7 @@
               <div class="card">
                 <div class="card-body">
                   <h5 class="card-title">Average Stay Time</h5>
-                  <p class="card-text">{{ averageStayTime }} minutes</p>
+                  <p class="card-text">{{ this.formattedAverageStayTime}}</p>
                 </div>
               </div>
             </div>
@@ -35,7 +35,7 @@
               <div class="card">
                 <div class="card-body">
                   <h5 class="card-title">Most Used Parking</h5>
-                  <p class="card-text">{{ mostUsedParkingPlace }}</p>
+                  <p class="card-text">{{ this.statistics.mostPopularParkingId }} - {{this.statistics.mostPopularParkingAddress}}</p>
                 </div>
               </div>
             </div>
@@ -57,11 +57,22 @@
     },
     data() {
       return {
-        totalUsers: 0,
-        totalParkingSpaces: 0,
-        averageStayTime: 0,
-        mostUsedParkingPlace: '',
+        statistics: {
+          totalUsers: 0,
+          totalParkingPlaces: 0,
+          averageStayTime: 0,
+          mostPopularParkingId: 0,
+          mostPopularParkingAddress: '',
+        }
       };
+    },
+    computed: {
+      // Add formatted average stay time with hours and minutes
+      formattedAverageStayTime() {
+        const hours = Math.floor(this.statistics.averageStayTime / 60);
+        const minutes = this.statistics.averageStayTime % 60;
+        return `${hours}h ${minutes}m`;
+      },
     },
     created() {
       this.fetchStatistics();
@@ -69,12 +80,7 @@
     methods: {
       async fetchStatistics() {
         try {
-          const statistics = await apiService.getAdminStatistics();
-
-          this.totalUsers = statistics.totalUsers;
-          this.totalParkingSpaces = statistics.totalParkingSpaces;
-          this.averageStayTime = statistics.averageStayTime;
-          this.mostUsedParkingPlace = statistics.mostUsedParkingPlace;
+           this.statistics = await apiService.getAdminStatistics();
         } catch (error) {
           console.error('Failed to fetch statistics:', error);
         }
