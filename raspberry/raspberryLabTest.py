@@ -1,9 +1,10 @@
 import RPi.GPIO as GPIO
-from config import *
 from mfrc522 import MFRC522
+from config import *
+from time import sleep
 from datetime import datetime
 import paho.mqtt.client as mqtt
-from settings import MQTT_BROKER_ADDRESS, MQTT_TOPIC, PARKING_ID, ENTRY
+from settings import MQTT_BROKER_ADDRESS, MQTT_TOPIC_INBOUND, MQTT_TOPIC_OUTBOUND, PARKING_ID, ENTRY
 import json
 
 
@@ -23,11 +24,28 @@ def send_message(rfidNumber):
         client.reconnect()
 
     # Publish the message to the specified topic
-    result = client.publish(MQTT_TOPIC, message_json)
+    result = client.publish(MQTT_TOPIC_INBOUND, message_json)
     if result.rc == mqtt.MQTT_ERR_SUCCESS:
         print("Message sent successfully.")
     else:
         print(f"Failed to send message with error code {result.rc}")
+
+def on_message_outbound(client, userdata, msg):
+    if msg.topic == MQTT_TOPIC_OUTBOUND:
+        message = msg.payload.decode('utf-8')
+        print(f"Accepted outbound message: {message}")
+        led_blink()
+
+def led_blink():
+    GPIO.output(led1, GPIO.HIGH)
+    GPIO.output(led2, GPIO.HIGH)
+    GPIO.output(led3, GPIO.HIGH)
+    GPIO.output(led4, GPIO.HIGH)
+    sleep(1)
+    GPIO.output(led1, GPIO.LOW)
+    GPIO.output(led2, GPIO.LOW)
+    GPIO.output(led3, GPIO.LOW)
+    GPIO.output(led4, GPIO.LOW)
 
 class RFIDController:
     def __init__(self):
@@ -78,12 +96,13 @@ def run_rfid_controller(rfid_controller, time_period=0.5):
         buzzer(False)
 
 if __name__ == "__main__":
-    # Create an MQTT client instance
     RFIDController = RFIDController()
     client = mqtt.Client()
-    # Set the on_connect callback
+    
     client.connect(MQTT_BROKER_ADDRESS, 1883, 60)
     client.loop_start()
+    client.subscribe(MQTT_TOPIC_OUTBOUND)
+    client.message_callback_add(MQTT_TOPIC_OUTBOUND,  on_message_outbound)
 
     try:
         while True:
@@ -91,6 +110,5 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\nExiting the script.")
     finally:
-        # Disconnect from the MQTT broker
         client.disconnect()
         client.loop_stop()
