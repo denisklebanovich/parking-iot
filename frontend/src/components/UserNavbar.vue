@@ -1,7 +1,8 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light ms-2 me-2">
-    <a class="navbar-brand" href="#">Your App</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand" href="#"><b>Smart Park</b></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
@@ -15,7 +16,7 @@
       </ul>
       <div class="navbar-nav ms-auto">
         <span class="navbar-brand">{{ userName }} {{ userSurname }}</span>
-        <LogoutButton />
+        <LogoutButton/>
       </div>
     </div>
   </nav>

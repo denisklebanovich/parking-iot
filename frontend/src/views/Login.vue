@@ -37,11 +37,10 @@
         
       try {
         const user = await userStore.signin( {username: this.username, password: this.password} );
-        userStore.setUser(user);
-
+        await userStore.setUser(user);
         this.$router.push(user.role === 'USER' ? '/user/parking' : '/admin/parking');
       } catch (error) {
-        console.error(error.message);
+        console.error(error);
       }
     },
   },
