@@ -7,7 +7,7 @@ import paho.mqtt.client as mqtt
 from settings import MQTT_BROKER_ADDRESS, MQTT_TOPIC_INBOUND, MQTT_TOPIC_OUTBOUND, PARKING_ID, ENTRY
 import json
 
-
+#Funkcja dla wysłania wiadomości do brokera
 def send_message(rfidNumber):
     # Message content
     message_content = {
@@ -30,12 +30,14 @@ def send_message(rfidNumber):
     else:
         print(f"Failed to send message with error code {result.rc}")
 
+#Funkcja dla odbierania wiadomości z brokera
 def on_message_outbound(client, userdata, msg):
     if msg.topic == MQTT_TOPIC_OUTBOUND:
         message = msg.payload.decode('utf-8')
         print(f"Accepted outbound message: {message}")
         led_blink()
 
+#Funkcja dla migania diodami
 def led_blink():
     GPIO.output(led1, GPIO.HIGH)
     GPIO.output(led2, GPIO.HIGH)
@@ -47,6 +49,7 @@ def led_blink():
     GPIO.output(led3, GPIO.LOW)
     GPIO.output(led4, GPIO.LOW)
 
+#klasa dla kontrolowania czytnika kart RFID
 class RFIDController:
     def __init__(self):
         self.mfrc522_reader = MFRC522()
@@ -79,9 +82,11 @@ class RFIDController:
             self.is_being_used = False
         return False
 
+#Funkcja dla dźwiękowego sygnalizowania czytnika kart RFID
 def buzzer(state):
     GPIO.output(buzzerPin, not state)
 
+#Funkcja dla uruchomienia kontrolowania czytnika kart RFID oraz kontrolowania buzzera
 def run_rfid_controller(rfid_controller, time_period=0.5):
     was_read_successful = rfid_controller.read()
     if was_read_successful:
@@ -98,7 +103,8 @@ def run_rfid_controller(rfid_controller, time_period=0.5):
 if __name__ == "__main__":
     RFIDController = RFIDController()
     client = mqtt.Client()
-    
+
+    #Setup    
     client.connect(MQTT_BROKER_ADDRESS, 1883, 60)
     client.loop_start()
     client.subscribe(MQTT_TOPIC_OUTBOUND)
